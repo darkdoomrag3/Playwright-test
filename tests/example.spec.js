@@ -1,6 +1,12 @@
 // @ts-check
 const { test, expect } = require('@playwright/test');
 
+test.beforeEach(async ({ page }) => {
+  await page.goto('http://localhost:4200');
+
+
+});
+
 
 test('this is test', async ({ browser }) => {
   const context = await browser.newContext();
@@ -24,7 +30,7 @@ test('this is test', async ({ browser }) => {
 
 
 
-test.only('blinking text', async ({ browser }) => {
+test('blinking text', async ({ browser }) => {
   const context = await browser.newContext();
   // Create a new page inside context.
   const page = await context.newPage();
@@ -44,4 +50,46 @@ test.only('blinking text', async ({ browser }) => {
 
 })
 
+
+test('test functions', async ({ page }) => {
+  await page.getByRole('link', { name: 'Forms' }).click();
+  await page.getByRole('link', { name: 'Form Layouts' }).click();
+
+  await page.locator('label').filter({ hasText: 'Option 1' }).locator('span').nth(1).click()
+  await page.locator('nb-card').getByRole('button', { name: 'Sign in' }).first().click()
+
+})
+
+test('test ', async ({ page }) => {
+  await page.getByRole('link', { name: 'Forms' }).click();
+  await page.getByRole('link', { name: 'Form Layouts' }).click();
+  await page.locator('nb-card').filter({ hasText: 'Basic formEmail' }).locator('span').first().click()
+  await page.getByRole('link', { name: 'Modal & Overlays' }).click();
+  await page.getByRole('link', { name: 'Tooltip' }).click();
+
+})
+
+test('parent to child locating element', async ({ page }) => {
+  await page.getByRole('link', { name: 'Forms' }).click();
+  await page.getByRole('link', { name: 'Form Layouts' }).click();
+  await page.locator('nb-card', { hasText: 'Using the Grid' }).locator('#inputEmail1').fill("email.gmail.com")
+  await page.locator('nb-card', { has: page.locator('#inputPassword2') }).locator('#inputPassword2').fill("Emad Bay")
+  await page.locator('nb-card').filter({ has: page.locator('#exampleInputPassword1') }).locator('#exampleInputPassword1').fill("Emad Bay")
+  await page.locator('nb-card').filter({ hasText: 'Horizontal form' }).locator('#inputEmail3').fill('thisisthetest@gmail.com')
+
+})
+
+
+test('Reusing locators', async ({ page }) => {
+  const clickOnForm = page.getByRole('link', { name: 'Forms' })
+  const clickOnFormLayouts = page.getByRole('link', { name: 'Form Layouts' })
+  const usingTheGrid = page.locator('nb-card', { hasText: 'Using the Grid' })
+  await clickOnForm.click();
+  await clickOnFormLayouts.click()
+
+  await usingTheGrid.locator('#inputEmail1').fill("email@gmail.com")
+  await usingTheGrid.locator('#inputPassword2').fill("passwordEmad")
+  await usingTheGrid.getByRole('button').click()
+
+})
 
