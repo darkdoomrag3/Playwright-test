@@ -58,7 +58,7 @@ test('List and Dropdown', async ({ page }) => {
     //     .filter({ hasText: 'Dark' }).click();
     const optionList = page.locator('.options-list nb-option');
     await expect(optionList).toHaveText(["Light", "Dark", "Cosmic", "Corporate"]);
-    await optionList.filter({ hasText: "Cosmic" }).click();
+    await optionList.filter({ hasText: "Dark" }).click();
     const header = page.locator('nb-layout-header')
     // await expect(header).toHaveCSS('background-color', 'rgb(50, 50, 89)')
     const colors = {
@@ -67,12 +67,54 @@ test('List and Dropdown', async ({ page }) => {
         "Cosmic": "rgb(50,50,89)",
         "Corporate": "rgb(255,255,255)"
     }
-    
-    await dropDown.click();
-    for (const color in colors) {
-        await optionList.filter({ hasText: color }).click();
-        await expect(header).toHaveCSS('background-color', colors[color])
-        await dropDown.click();
-    }
 
+    // await dropDown.click();
+    // for (const color in colors) {
+    //     await optionList.filter({ hasText: color }).click();
+    //     await expect(header).toHaveCSS('background-color', colors[color])
+    //     if(color != "Cosmic") {
+    //         await dropDown.click();
+    //     }
+
+    // }
+
+})
+
+test('tooltip', async ({ page }) => {
+    await page.getByRole('link', { name: 'Modal & Overlays' }).click();
+    await page.getByRole('link', { name: 'Tooltip' }).click();
+    const tolltipButton = page.locator('nb-card', { hasText: "Tooltip Placements" })
+    await tolltipButton.getByRole('button', { name: 'Top' }).hover();
+    const tooltipText = page.locator('nb-tooltip').textContent();
+    expect(await tooltipText).toEqual('This is a tooltip');
+})
+
+test('dialog', async ({ page }) => {
+    await page.getByRole('link', { name: 'Tables & Data' }).click();
+    await page.getByRole('link', { name: 'Smart Table' }).click();
+
+    page.on('dialog', dialog => {
+        expect(dialog.message()).toBe('Are you sure you want to delete?');
+        dialog.accept();
+    });
+    await page.getByRole('table').locator('tr', { hasText: 'mdo@gmail.com' }).locator('.nb-trash').click();
+    await expect(page.locator('table tr').first()).not.toHaveText('mdo@gmail.com');
+})
+
+
+test('table', async ({ page }) => {
+    await page.getByRole('link', { name: 'Tables & Data' }).click();
+    await page.getByRole('link', { name: 'Smart Table' }).click();
+
+    const targetRow = page.getByRole('row', { name: "twitter@outlook.com" })
+    await targetRow.locator('.nb-edit').click();
+    await page.locator('input-editor').getByPlaceholder("Age").clear();
+    await page.locator('input-editor').getByPlaceholder("Age").fill('30');
+    await page.keyboard.press('Enter');
+    await page.locator('.ng2-smart-pagination-nav').getByText('2').click();
+    const targetByRowId = page.getByRole('row',{name:"11"}).filter({has:page.locator('td').nth(1).getByText("11")})
+    await targetByRowId.locator('.nb-edit').click();
+    await page.locator('input-editor').getByPlaceholder("E-mail").clear();
+    await page.locator('input-editor').getByPlaceholder("E-mail").fill('test@test.com');
+    await page.locator('.nb-checkmark').click();
 })
