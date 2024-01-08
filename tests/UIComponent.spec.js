@@ -223,23 +223,23 @@ test('dynamic datepicker with Data function', async ({ page }) => {
 
     await page.locator('[class="day-cell ng-star-inserted"]').getByText(expectedDate, { exact: true }).click();
 
-    
+
     const selectedDateButtonPredicate = async (element) => {
         const dateValue = await element.getProperty('nb-calendar-navigation');
         if (dateValue === `${expectedDate2}`) {
-          return true;
+            return true;
         }
         return false;
-      };
-      
-      // Select the button using the custom predicate
-      const selectedDateButton =  page.locator('nb-calendar-navigation', {
-        predicate:  selectedDateButtonPredicate
-      });
-      
-      // Click on the selected date button
+    };
+
+    // Select the button using the custom predicate
+    const selectedDateButton = page.locator('nb-calendar-navigation', {
+        predicate: selectedDateButtonPredicate
+    });
+
+    // Click on the selected date button
     //   await selectedDateButton.textContent();
-    
+
     let calendarMonthAndYear = await page.locator(`.nb-calendar-navigation[ng-reflect-date='${expectedDate2}']`).textContent();
     const expectedMonthAndYear = `${month} ${year}`;
 
@@ -250,3 +250,21 @@ test('dynamic datepicker with Data function', async ({ page }) => {
 
     // Add further assertions or actions as needed
 });
+
+test('dynamic slider', async ({ page }) => {
+    const tempBox = page.locator('[tabletitle="temprature"] ngx-temrature circle')
+    // await tempGaue.evaluate(node=>{
+    //     node.setAttribute('cx','232.63.')
+    //     node.setAttribute('cy','232.63.')
+    // })
+    await tempBox.scrollIntoViewIfNeeded();
+    const box = await tempBox.boundingBox();
+    const x = box.x + box.width / 2
+    const y = box.y + box.height / 2
+    await page.mouse.move(x, y)
+    await page.mouse.down()
+    await page.mouse.move(x + 100, y)
+    await page.mouse.move(x + 100, y + 100)
+    await page.mouse.up()
+    await expect(tempBox).toContainText('30')
+})
