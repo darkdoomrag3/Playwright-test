@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 const exp = require('constants');
 const moment = require('moment');
+const { NavigationPage } = require('../page-objects/navigationPage')
 
 test.beforeEach(async ({ page }) => {
     await page.goto('http://localhost:4200');
@@ -33,8 +34,11 @@ test('radio Buttons', async ({ page }) => {
 })
 
 test('Check Box', async ({ page }) => {
-    await page.getByRole('link', { name: 'Modal & Overlays' }).click();
-    await page.getByRole('link', { name: 'Toastr' }).click();
+    const modalPage = new NavigationPage(page);
+    await modalPage.ModalPage();
+
+    // await page.getByRole('link', { name: 'Modal & Overlays' }).click();
+    // await page.getByRole('link', { name: 'Toastr' }).click();
     await page.getByLabel('Prevent arising of duplicate toast').check({ force: true })
     await page.getByLabel('Hide on click').uncheck({ force: true });
     await page.getByRole('checkbox', { name: "Show toast with icon" }).click({ force: true })
