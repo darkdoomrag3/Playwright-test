@@ -1,5 +1,6 @@
 const { test, expect } = require('@playwright/test');
 const { NavigationPage } = require('../page-objects/navigationPage')
+const { FormsLayoutsPage } = require('../page-objects/formsLayoutPage')
 const moment = require('moment');
 
 test.beforeEach(async ({ page }) => {
@@ -9,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 test('navigation to the form page', async ({ page }) => {
     const navigation = new NavigationPage(page)
     await navigation.formsLayoutsPage();
-    
+
 })
 
 test('Check Box', async ({ page }) => {
@@ -60,9 +61,9 @@ test('dynamic datepicker', async ({ page }) => {
     const nextMonth = moment().add(1, 'months').format('MMM DD, YYYY');
     const day = moment().add(7, 'days').format('MMM DD, YYYY');
 
-   const datePickerPage= new NavigationPage(page);
+    const datePickerPage = new NavigationPage(page);
     await datePickerPage.DatePickerPage();
-    
+
     const calandarField = page.getByPlaceholder('Form Picker');
     await calandarField.click();
     await calandarField.fill(`${day}`)
@@ -73,5 +74,16 @@ test('dynamic datepicker', async ({ page }) => {
 
     await page.locator('nb-calendar-picker nb-calendar-day-cell').getByText(`${finalDay}`, { exact: true }).click()
 
+
+})
+
+
+test('Input fileds and radio Buttons', async ({ page }) => {
+    const submitUsingGridForm = new FormsLayoutsPage(page);
+    const navigation = new NavigationPage(page)
+    await navigation.formsLayoutsPage();
+   
+    await submitUsingGridForm.submitUsingGridFormWithCredentialAndOption("test@test.com","Emad@dude!1377");
+    await  submitUsingGridForm.submitInlineForm("Emad","Emad@dude!1377",true)
 
 })
