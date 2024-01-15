@@ -1,6 +1,9 @@
 const { test, expect } = require('@playwright/test');
 const { NavigationPage } = require('../page-objects/navigationPage')
 const { FormsLayoutsPage } = require('../page-objects/formsLayoutPage')
+const { DatePicker } = require('../page-objects/datePickerPage')
+const { pageManager } = require('../page-objects/pageManager')
+
 const moment = require('moment');
 
 test.beforeEach(async ({ page }) => {
@@ -66,13 +69,13 @@ test('dynamic datepicker', async ({ page }) => {
 
     const calandarField = page.getByPlaceholder('Form Picker');
     await calandarField.click();
-    await calandarField.fill(`${day}`)
+    await calandarField.fill(`${day}`);
     const inputDataClick = page.getByPlaceholder('Form Picker');
     // Get the selected date button
     await inputDataClick.click();
     const finalDay = moment().add(7, 'days').format('DD');
 
-    await page.locator('nb-calendar-picker nb-calendar-day-cell').getByText(`${finalDay}`, { exact: true }).click()
+    await page.locator('nb-calendar-picker nb-calendar-day-cell').getByText(`${finalDay}`, { exact: true }).click();
 
 
 })
@@ -80,10 +83,35 @@ test('dynamic datepicker', async ({ page }) => {
 
 test('Input fileds and radio Buttons', async ({ page }) => {
     const submitUsingGridForm = new FormsLayoutsPage(page);
-    const navigation = new NavigationPage(page)
+    const navigation = new NavigationPage(page);
     await navigation.formsLayoutsPage();
-   
-    await submitUsingGridForm.submitUsingGridFormWithCredentialAndOption("test@test.com","Emad@dude!1377");
-    await  submitUsingGridForm.submitInlineForm("Emad","Emad@dude!1377",true)
+
+    await submitUsingGridForm.submitUsingGridFormWithCredentialAndOption("test@test.com", "Emad@dude!1377");
+    await submitUsingGridForm.submitInlineForm("Emad", "Emad@dude!1377", true);
+
+})
+
+test('dynamic datepicker with Data function', async ({ page }) => {
+    const datePickerNavigation = new NavigationPage(page);
+    const datePickerpage = new DatePicker(page);
+    await datePickerNavigation.DatePickerPage();
+    await datePickerpage.singelDatePicker(2);
+
+})
+
+test('parametrize method', async ({ page }) => {
+    //page object with page manager
+    const pages = new pageManager(page);
+    await pages.navigateTo().DatePickerPage();
+    await pages.onDatePickerPage().singelDatePicker(2)
+    await pages.onDatePickerPage().rangeDatePicker(3, 5)
+
+
+    //page object without page manager
+    // const datePickerNavigation = new NavigationPage(page);
+    // const datePickerpage = new DatePicker(page);
+    // await datePickerNavigation.DatePickerPage();
+    // await datePickerpage.singelDatePicker(2);
+    // await datePickerpage.rangeDatePicker(3,5);
 
 })

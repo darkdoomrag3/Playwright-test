@@ -1,11 +1,12 @@
 const { expect } = require('@playwright/test');
+const { HelperBase } = require('./helperBase');
 /**
   * @param {import('playwright').Page} page
   */
 
-class NavigationPage {
+class NavigationPage extends HelperBase{
     constructor(page) {
-        this.page = page;
+       super(page)
         
         // you can keep it simple which means that write locators code inside the method, for example for formsLayoutsPage page.getByText('Forms'); defined into formsLayoutsPage not into counstructor for eassly debug and avoid confiusing in order to debug
         this.form = page.getByText('Forms');
@@ -20,6 +21,7 @@ class NavigationPage {
     async formsLayoutsPage() {
         await this.form.click();
         await this.fomLayouts.click();
+        await this.waitForNumberOfSecond(3)
     }
     async ModalOverlaysPage() {
         await this.modal.click();

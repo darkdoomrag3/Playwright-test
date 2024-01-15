@@ -228,31 +228,31 @@ test('dynamic datepicker with Data function', async ({ page }) => {
     await page.locator('[class="day-cell ng-star-inserted"]').getByText(expectedDate, { exact: true }).click();
 
 
-    const selectedDateButtonPredicate = async (element) => {
-        const dateValue = await element.getProperty('nb-calendar-navigation');
-        if (dateValue === `${expectedDate2}`) {
-            return true;
-        }
-        return false;
-    };
+    // const selectedDateButtonPredicate = async (element) => {
+    //     const dateValue = await element.getProperty('nb-calendar-navigation');
+    //     if (dateValue === `${expectedDate2}`) {
+    //         return true;
+    //     }
+    //     return false;
+    // };
 
-    // Select the button using the custom predicate
-    const selectedDateButton = page.locator('nb-calendar-navigation', {
-        predicate: selectedDateButtonPredicate
-    });
+    // // Select the button using the custom predicate
+    // const selectedDateButton = page.locator('nb-calendar-navigation', {
+    //     predicate: selectedDateButtonPredicate
+    // });
 
-    // Click on the selected date button
-    //   await selectedDateButton.textContent();
+    // // Click on the selected date button
+    // //   await selectedDateButton.textContent();
 
-    let calendarMonthAndYear = await page.locator(`.nb-calendar-navigation[ng-reflect-date='${expectedDate2}']`).textContent();
-    const expectedMonthAndYear = `${month} ${year}`;
+    // let calendarMonthAndYear = await page.locator(`.nb-calendar-navigation[ng-reflect-date='${expectedDate2}']`).textContent();
+    // const expectedMonthAndYear = `${month} ${year}`;
 
-    while (!calendarMonthAndYear.includes(expectedMonthAndYear)) {
-        await page.locator('nb-calendar-pageable-navigation [data-name="chevron-right"]').click();
-        calendarMonthAndYear = await page.locator('nb-calendar-navigation').textContent();
-    }
+    // while (!calendarMonthAndYear.includes(expectedMonthAndYear)) {
+    //     await page.locator('nb-calendar-pageable-navigation [data-name="chevron-right"]').click();
+    //     calendarMonthAndYear = await page.locator('nb-calendar-navigation').textContent();
+    // }
 
-    // Add further assertions or actions as needed
+
 });
 
 test('dynamic slider', async ({ page }) => {

@@ -2,6 +2,9 @@ const { test, expect } = require('@playwright/test');
 const { NavigationPage } = require('../page-objects/navigationPage')
 /**
   * @param {import('playwright').Page} page
+  * @param name -should be first and last name
+  * @param email - valid email address
+  * @param rememberMe -true or false if user session to be safed
   */
 
 class FormsLayoutsPage {
