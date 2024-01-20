@@ -12,10 +12,7 @@ test.beforeEach(async ({ page }) => {
 
 
     await page.goto('https://angular.realworld.how/')
-    await page.getByText('Sign in').click();
-    await page.getByRole('textbox', { name: 'Email' }).fill('emadddddd@gmail.com');
-    await page.getByRole('textbox', { name: 'Password' }).fill('testPassword');
-    await page.getByRole('button').click();
+ 
 })
 
 
@@ -55,4 +52,33 @@ test('delet article', async ({ page, request }) => {
     await page.getByText('this is a test title').click()
     await page.getByRole('button',{name:' Delete Article '}).first().click();
     await expect(page.locator('.preview-link h1').first()).not.toContainText('this is a Mock test article')
+})
+
+test('create Article',async({page,request})=>{
+    await page.getByText('New Article').click();
+    await page.getByPlaceholder('Article Title').fill('Playwright article')
+    await page.getByRole('textbox',{name: "What's this article about?"}).fill('about the playwright')
+    await page.getByRole('textbox',{name: "Write your article (in markdown)"}).fill('this is the body of the article about playwright')
+    await page.getByText('Publish Article').click();
+    
+    const articleResponse = await page.waitForResponse('https://api.realworld.io/api/articles/')
+    const articleResponseBody = await articleResponse.json();
+    const slugId = articleResponseBody.article.slug;
+    console.log(slugId)
+
+    await page.getByText('Home').click();
+    const response = await request.post('https://api.realworld.io/api/users/login', {
+        data: { "user": { "email": "emadtest@gmail.com", "password": "Test@test123" } }
+    })
+    const responsebody = await response.json();
+    const accessToken= responsebody.user.token;
+   const deletArticleResponse = await request.delete(`https://api.realworld.io/api/articles/${slugId}`,{
+        headers:{Authorization: `Token ${accessToken}`}
+    })
+    await page.getByText('Home').click();
+    await page.getByText('Your Feed').click();
+    await page.getByText('Global Feed').click();
+    
+    expect(deletArticleResponse.status()).toEqual(204);
+
 })
