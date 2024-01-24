@@ -5,10 +5,10 @@ test('Okala Happy with codegen', async ({ page }) => {
   await page.getByRole('button', { name: 'ورود به اکالا' }).click();
   await page.goto('https://okala.com/login');
   await page.getByPlaceholder('09123456789').click();
-  await page.getByPlaceholder('09123456789').fill('09376681856');
+  await page.getByPlaceholder('09123456789').fill('09123456789');
   await page.getByRole('button', { name: 'ثبت و ادامه' }).click();
   await page.getByLabel('رمز عبور').click();
-  await page.getByLabel('رمز عبور').fill('Emad@40304030');
+  await page.getByLabel('رمز عبور').fill('this is the test');
   await page.getByRole('button', { name: 'ورود به اکالا' }).click();
   await page.goto('https://okala.com/stores');
   await page.goto('https://okala.com/cart/4741');
@@ -18,5 +18,5 @@ test('Okala Happy with codegen', async ({ page }) => {
   await page.getByRole('button', { name: 'انتخاب زمان تحویل' }).click();
   await page.getByLabel('تحویل در 45 دقیقهرایگان').check();
   await page.getByRole('button', { name: 'پرداخت و ثبت نهایی' }).click();
-  // await page.goto('https://sep.shaparak.ir//OnlinePG/OnlinePG?_gl=1*1950ql0*_ga*MTExNzk5NjM4NC4xNzAyNDg1MzMy*_ga_QSWTEZHYHB*MTcwMjQ4NTMzMi4xLjEuMTcwMjQ4NTQyNC4zMi4wLjA.');
+ 
 });

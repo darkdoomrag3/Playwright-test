@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "pageObjects-firefox": "npx playwright test usePageObjects.spec.js --project=firefox",
+    "pageObjects-chrome": "npx playwright test usePageObjects.spec.js --project=chromium",
+    "API-Test": "npx playwright test firstTest.spec.js --project=firefox",
+    "API-Test-chrome": "npx playwright test firstTest.spec.js --project=chromium",
+    "pageObjects-All": "npm run pageObjects-firefox && npm run pageObjects-chrome"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -12,6 +18,7 @@
     "@types/node": "^20.10.4"
   },
   "dependencies": {
+    "@faker-js/faker": "^8.3.1",
     "moment": "^2.30.1"
   }
 }

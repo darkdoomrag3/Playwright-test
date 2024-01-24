@@ -3,6 +3,8 @@ const { NavigationPage } = require('../page-objects/navigationPage')
 const { FormsLayoutsPage } = require('../page-objects/formsLayoutPage')
 const { DatePicker } = require('../page-objects/datePickerPage')
 const { pageManager } = require('../page-objects/pageManager')
+import { RandomData } from '../test_data/fakedata'
+
 
 const moment = require('moment');
 
@@ -73,7 +75,7 @@ test('dynamic datepicker', async ({ page }) => {
     const inputDataClick = page.getByPlaceholder('Form Picker');
     // Get the selected date button
     await inputDataClick.click();
-    const finalDay = moment().add(7, 'days').format('DD');
+    const finalDay = moment().add(3, 'days').format('DD');
 
     await page.locator('nb-calendar-picker nb-calendar-day-cell').getByText(`${finalDay}`, { exact: true }).click();
 
@@ -84,10 +86,17 @@ test('dynamic datepicker', async ({ page }) => {
 test('Input fileds and radio Buttons', async ({ page }) => {
     const submitUsingGridForm = new FormsLayoutsPage(page);
     const navigation = new NavigationPage(page);
-    await navigation.formsLayoutsPage();
+    // Correct way to instantiate RandomData
+    const randomDataInstance = new RandomData();
 
-    await submitUsingGridForm.submitUsingGridFormWithCredentialAndOption("test@test.com", "Emad@dude!1377");
-    await submitUsingGridForm.submitInlineForm("Emad", "Emad@dude!1377", true);
+    const randomUser = randomDataInstance.createRandomUser();
+    const randomName = randomUser.name;
+    const randomEmail = randomUser.email;
+    const ramdomPassword = randomUser.password;
+
+    await navigation.formsLayoutsPage();
+    await submitUsingGridForm.submitUsingGridFormWithCredentialAndOption(randomName, ramdomPassword);
+    await submitUsingGridForm.submitInlineForm(randomName, randomEmail, true);
 
 })
 
@@ -104,7 +113,7 @@ test('parametrize method', async ({ page }) => {
     const pages = new pageManager(page);
     await pages.navigateTo().DatePickerPage();
     await pages.onDatePickerPage().singelDatePicker(2)
-    await pages.onDatePickerPage().rangeDatePicker(3, 5)
+    await pages.onDatePickerPage().rangeDatePicker(5, 6)
 
 
     //page object without page manager
