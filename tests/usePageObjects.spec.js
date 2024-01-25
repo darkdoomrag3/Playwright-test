@@ -9,7 +9,7 @@ import { RandomData } from '../test_data/fakedata'
 const moment = require('moment');
 
 test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:4200');
+    await page.goto('/');
 });
 
 test('navigation to the form page', async ({ page }) => {
@@ -97,6 +97,7 @@ test('Input fileds and radio Buttons', async ({ page }) => {
     await navigation.formsLayoutsPage();
     await submitUsingGridForm.submitUsingGridFormWithCredentialAndOption(randomName, ramdomPassword);
     await submitUsingGridForm.submitInlineForm(randomName, randomEmail, true);
+    await page.screenshot({path : 'screenshots/Inputfileds.png'})
 
 })
 

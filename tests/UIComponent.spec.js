@@ -3,8 +3,10 @@ const exp = require('constants');
 const moment = require('moment');
 const { NavigationPage } = require('../page-objects/navigationPage')
 
+// test.describe.configure({mode: 'parallel'})
+
 test.beforeEach(async ({ page }) => {
-    await page.goto('http://localhost:4200');
+    await page.goto('/');
 });
 
 test.describe('Form layoutg page', () => {
@@ -16,7 +18,7 @@ test.describe('Form layoutg page', () => {
         const usingTheGridEmailInput = page.locator('nb-card', { hasText: 'Using the Grid' }).getByRole('textbox', { name: "Email" });
         await usingTheGridEmailInput.fill('test@test.com');
         await usingTheGridEmailInput.clear();
-        await usingTheGridEmailInput.pressSequentially('test@test.com', { delay: 100 });
+        await usingTheGridEmailInput.pressSequentially('test@test.com');
         const inputValue = await usingTheGridEmailInput.inputValue();
         expect(inputValue).toEqual('test@test.com');
     })
