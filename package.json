@@ -14,8 +14,9 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.40.1",
-    "@types/node": "^20.10.4"
+    "@playwright/test": "^1.41.1",
+    "@types/node": "^20.10.4",
+    "allure-playwright": "^2.11.1"
   },
   "dependencies": {
     "@faker-js/faker": "^8.3.1",

@@ -1,0 +1,29 @@
+<testsuites id="" name="" tests="2" failures="1" skipped="0" errors="0" time="6.275424">
+<testsuite name="API Test\auth.setup.js" timestamp="2024-01-26T15:24:16.751Z" hostname="setup" tests="1" failures="0" skipped="0" time="1.668" errors="0">
+<testcase name="authentication" classname="API Test\auth.setup.js" time="1.668">
+</testcase>
+</testsuite>
+<testsuite name="mobileTest.spec.js" timestamp="2024-01-26T15:24:16.751Z" hostname="chromium" tests="1" failures="1" skipped="0" time="2.793" errors="0">
+<testcase name="Form layoutg page" classname="mobileTest.spec.js" time="2.793">
+<failure message="mobileTest.spec.js:5:1 Form layoutg page" type="FAILURE">
+<![CDATA[  [chromium] › mobileTest.spec.js:5:1 › Form layoutg page ──────────────────────────────────────────
+
+    Error: page.goto: net::ERR_CONNECTION_REFUSED at http://localhost:4200/
+    Call log:
+      - navigating to "http://localhost:4200/", waiting until "load"
+
+
+       5 | test('Form layoutg page', (async ({ page }, testInfo) => {
+       6 |
+    >  7 |     await page.goto('/')
+         |                ^
+       8 |     if (testInfo.project.name == 'Mobile') {
+       9 |         await page.locator('.sidebar-toggle').click();
+      10 |     }
+
+        at e:\playwright project\Playwright-test\tests\mobileTest.spec.js:7:16
+]]>
+</failure>
+</testcase>
+</testsuite>
+</testsuites>

@@ -4,10 +4,7 @@ const { defineConfig, devices } = require('@playwright/test');
 
 
 
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
+
 require('dotenv').config();
 
 /**
@@ -16,24 +13,26 @@ require('dotenv').config();
 module.exports = defineConfig({
   testDir: './tests',
   /* Run tests in files in parallel */
-  fullyParallel: true,
-  /* Fail the build on CI if you accidentally left test.only in the source code. */
-  forbidOnly: !!process.env.CI,
-  /* Retry on CI only */
-  retries: process.env.CI ? 2 : 0,
-  /* Opt out of parallel tests on CI. */
+  fullyParallel: false,
+
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html', timeout: 5 * 60 * 1000,
+  reporter: [
+    ['junit',{outputFile:'test-result/junitReporter.xml'}],
+    ['allure-playwright']
+
+], 
+  
+  timeout: 5 * 60 * 1000,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'http://localhost:4200',
+    baseURL: process.env.BASE_URL,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
     timeout: 5 * 60 * 1000,
-    extraHTTPHeaders:{
+    extraHTTPHeaders: {
       'Authorization': `Token ${process.env.ACCESS_TOKEN}`
     }
   },
@@ -41,8 +40,32 @@ module.exports = defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
-      name : 'setup',
-      testMatch :'auth.setup.js'
+      name: 'setup',
+      testMatch: 'auth.setup.js'
+    },
+    {
+      name: 'articleSetUp',
+      testMatch: 'newArticle.setup.js',
+      dependencies: ['setup'],
+      teardown: 'articleCleanUp'
+    },
+    {
+      name: 'articleCleanUp',
+      testMatch: 'ArticleCleanUp.setup.js',
+
+    }, 
+    {
+      name: 'Mobile',
+      testMatch: 'mobileTest.spec.js',
+      use: {
+        ...devices['iPhone 13'],
+      },
+    },
+    {
+      name: 'LikeCounter',
+      testMatch: 'LikeCounter.spec.js',
+      use: { ...devices['Desktop Safari'], storageState: './.auth/user.json' },
+      dependencies: ['articleSetUp']
     },
     {
       name: 'chromium',
@@ -52,15 +75,16 @@ module.exports = defineConfig({
 
     {
       name: 'firefox',
-      use: { ...devices['Desktop Firefox'], storageState: './.auth/user.json'  },
+      use: { ...devices['Desktop Firefox'], storageState: './.auth/user.json' },
       dependencies: ['setup']
     },
 
     {
       name: 'webkit',
-      use: { ...devices['Desktop Safari'], storageState: './.auth/user.json'  },
+      use: { ...devices['Desktop Safari'], storageState: './.auth/user.json' },
       dependencies: ['setup']
     },
+
 
     /* Test against mobile viewports. */
     // {
@@ -83,11 +107,6 @@ module.exports = defineConfig({
     // },
   ],
 
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://127.0.0.1:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+
 });
 
